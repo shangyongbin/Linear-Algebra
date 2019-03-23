@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1.2、矩阵消元</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1>&amp;1.2 矩阵消元</h1>
+<hr />
+<h2>一、概述</h2>
+<p>本节将讨论通过矩阵消元求解线性方程组。<br />
+我们还是通过简单例子来讲解。<strong>首先</strong>，对系数矩阵与增广矩阵代数描述消元过程（同时简单讨论了消元成功与消元失效的情况），通过回代求出方程组的解。<strong>然后<strong>，引入消元矩阵的概念进行矩阵消元，将消元过程完全矩阵化。</strong>最后</strong>，简单说明了矩阵乘法的运算规则。  </p>
+<p><strong>要点：</strong>  </p>
+<ul>
+<li>
+消元 Elimination 
+<ul>
+<li>成功 Success</li>
+<li>失效 Failure</li>
+</ul>
+</li>
+<li>回代 Back-Substitution</li>
+<li>消元矩阵 Elimination Matrices</li>
+<li>矩阵乘法 Matrix Multiplication</li>
+</ul>
+<h2>二、举例</h2>
+<p>以<br />
+$$
+ \left\{
+ \begin{matrix}
+ x+2y+z=2   &amp;\qquad (1) \\
+ 3x+8y+z=12 &amp;\qquad (2)\\
+ 0x+4y+z=2  &amp;\qquad (3)
+ \end{matrix}
+ \right.
+$$<br />
+为例。  </p>
+<h3>· 矩阵形式</h3>
+<p>该方程组的矩阵形式为：<br />
+$$
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 3 &amp; 8 &amp; 1 \\
+ 0 &amp; 4 &amp; 1 \\
+ \end{bmatrix}
+ \begin{bmatrix}
+ x \\
+ y \\
+ z \\
+ \end{bmatrix}
+ = 
+ \begin{bmatrix}
+ 2 \\
+ 12 \\
+ 2 \\
+ \end{bmatrix}
+$$<br />
+其中，系数矩阵
+\(
+ A=
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 3 &amp; 8 &amp; 1 \\
+ 0 &amp; 4 &amp; 1 
+ \end{bmatrix}
+\)
+，增广矩阵(Augmented Matrix)为
+\(
+ \bar{A}=
+ \left[
+ \begin{array}{ccc|c}
+ 1 &amp; 2 &amp; 1 &amp; 2\\
+ 3 &amp; 8 &amp; 1 &amp; 12\\
+ 0 &amp; 4 &amp; 1 &amp; 2
+ \end{array}
+ \right]
+\)。  </p>
+<h2>三、代数消元</h2>
+<h3>· 消元</h3>
+<p>消元法最早由高斯（Gauss）提出，消元法的思想其实很自然就能想出来：</p>
+<ul>
+<li><strong>step 1.</strong> 通过方程\(（1）\)消去方程\(（2）\)、\(（3）\)的未知数 \(x\)，得到方程\(（2'）\)和方程\(（3'）\);</li>
+<li><strong>step 2.</strong> 再通过方程\(（2'）\)消去方程\(（3'）\)的 \(y\)，得到方程\(（3''）\);</li>
+<li><strong>step 3.</strong> 最后得到方程\(（1）\)含有未知数 \(x\)，方程\(（2'）\)含有未知数 \(y\)、\(z\)，方程\(（3''）\)含有未知数 \(z\)。  </li>
+</ul>
+<p>下面我们直接用矩阵语描述消元法的过程。  </p>
+<h4>\(\boxed{A}\)</h4>
+<p>我们先只考虑系数矩阵的消元，然后再完成右侧向量b，做法同Matlab。<br />
+$$
+A=
+  \begin{bmatrix}
+  \boxed{1} &amp; 2 &amp; 1\\
+  3 &amp; 8 &amp; 1 \\
+  0 &amp; 4 &amp; 1
+  \end{bmatrix}
+\xrightarrow [（3，1）：row3-0·row1]{（2，1）：row2-3·row1}
+  \begin{bmatrix}
+  \boxed{1} &amp; 2 &amp; 1 \\
+  0 &amp; \boxed{2} &amp; -2 \\
+  0 &amp; 4 &amp; 1 
+  \end{bmatrix}
+\xrightarrow []{（3，2）：row3-2·row2}
+  \begin{bmatrix}
+  \boxed{1} &amp; 2 &amp; 1 \\
+  0 &amp; \boxed{2} &amp; -2 \\
+  0 &amp; 0 &amp; \boxed{5} 
+  \end{bmatrix}
+  =U
+$$
+消元目的是从系数矩阵\(A\)得到系数矩阵的上三角矩阵\(U\)（Upper triangular）,这是科学计算中最普遍的运算。<br />
+关于消元，还有几点需要说明：</p>
+<ul>
+<li>
+这个例子中我们找到了三个<strong>主元</strong>( <strong>pivot</strong> ）:1、2、5，<strong>主元不能为0</strong>，否则将<strong>消元失效</strong>。
+<ul>
+<li>
+失效指的是不能得到三个主元，即0占据了主元的位置。失效有下面几种情况。
+<ul>
+<li>如果可以通过<strong>行交换</strong>在下面的行中找到非0主元，解决主元为0的“暂时性失效”，此时还可以得到三个非0主元，消元**成功<em><em>。</em>系数矩阵可逆</em>。</li>
+<li>如果不能通过<strong>行交换</strong>找到非0主元，此时消元确定**失效<em><em>。</em>系数矩阵不可逆</em>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>顺便提一下行列式（determinant），<strong>行列式等于主元之积</strong>，这个例子系数矩阵的行列式等于10。</li>
+</ul>
+<h4>\(\boxed{\bar{A}}\)</h4>
+<p>当系数矩阵消元时，很明显右侧向量b也同步变化，因此我们加上一列，形成增广矩阵。
+$$
+ \bar{A}=
+  \left[
+  \begin{array}{ccc|c}
+  \boxed{1} &amp; 2 &amp; 1 &amp; 2\\
+  3 &amp; 8 &amp; 1 &amp; 12\\
+  0 &amp; 4 &amp; 1 &amp; 2
+  \end{array}
+  \right]
+\xrightarrow [（3，1）：row3-0·row1]{（2，1）：row2-3·row1}
+  \left[
+  \begin{array}{ccc|c}
+  \boxed{1} &amp; 2 &amp; 1 &amp; 2\\
+  0 &amp; \boxed{2} &amp; -2 &amp; 6\\
+  0 &amp; 4 &amp; 1 &amp; 2
+  \end{array}
+  \right]
+\xrightarrow []{（3，2）：row3-2·row2}
+  \left[
+  \begin{array}{ccc|c}
+  \boxed{1} &amp; 2 &amp; 1 &amp; 2\\
+  0 &amp; \boxed{2} &amp; -2 &amp; 6\\
+  0 &amp; 0 &amp; \boxed{5} &amp; -10
+  \end{array}
+  \right]
+$$  </p>
+<h3>· 回代</h3>
+<p>我们把对\(\bar{A}\)的消元结果重新写成方程组形式。<br />
+$$
+ \left\{
+ \begin{matrix}
+x+2y+z=2 &amp;\qquad (a) \\
+  2y-2z=6&amp;\qquad (b)\\
+  5z=-10 &amp;\qquad (c)
+ \end{matrix}
+ \right.
+$$<br />
+即
+$$
+Ux=c
+$$<br />
+通过方程\(（c）\)求出 \(z=-2\)，再通过方程\(（b）\)求出 \(y=1\)，最后通过方程\(（a）\)求出 \(x=2\)。这就是回代求解的过程。</p>
+<h2>四、矩阵消元</h2>
+<h3>· 置换矩阵\(P\)</h3>
+<p>消元过程中为了解决主元为0的“暂时性”消元失效，可能需要进行行交换，这时就需要置换矩阵。 
+<strong>置换矩阵</strong>（Permutation Matrices）是<strong>初等矩阵<strong>（</strong>Elementary Matrices</strong>）的一种，可以完成行交换和列交换。<br />
+置换矩阵形式上是行重新排列了的单位矩阵，下面我们举例说明置换矩阵的形式。  </p>
+<h5>\(Exchange \: row1 \: and \: row2\)</h5>
+<p>$$
+ \begin{bmatrix}
+ 0 &amp; 1 \\
+ 1 &amp; 0 \\
+ \end{bmatrix}
+ \begin{bmatrix}
+ a &amp; b \\
+ c &amp; d \\
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ c &amp; d \\
+ a &amp; b \\
+ \end{bmatrix}
+$$ </p>
+<h5>\(Exchange \: col1 \: and \: col2\)</h5>
+<p>$$
+ \begin{bmatrix}
+ a &amp; b \\
+ c &amp; d \\
+ \end{bmatrix}
+ \begin{bmatrix}
+ 0 &amp; 1 \\
+ 1 &amp; 0 \\
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ b &amp; a \\
+ d &amp; c \\
+ \end{bmatrix}
+$$  </p>
+<h3>· 消元矩阵\(E\)</h3>
+<p><strong>消元矩阵</strong>( <strong>Elimination Matrices</strong> )，顾名思义，是可以将我们前面讨论的代数消元矩阵化的一种特殊矩阵，它是初等矩阵的另一种。  </p>
+<p>为了写出消元矩阵，首先我们应该需要知道一下两点：  </p>
+<ul>
+<li>矩阵乘列向量等于矩阵各列的线性组合，组合系数为列向量的对应分量。</li>
+<li>行向量乘矩阵等于矩阵各行的线性组合，组合系数为行向量的对应分量。  </li>
+</ul>
+<p>由此我们可以写出消元过程每一步的消元矩阵。</p>
+<h5>\(E_{21}：row2-3·row1\)</h5>
+<p>第一行、第三行不变，只有第二行发生变化。<br />
+$$
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ -3&amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 3 &amp; 8 &amp; 1 \\
+ 0 &amp; 4 &amp; 1 
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 0 &amp; 2 &amp; -2 \\
+ 0 &amp; 4 &amp; 1
+ \end{bmatrix}
+$$<br />
+消元矩阵
+\(
+E_{21}=
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ -3&amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+\)。</p>
+<h5>\(E_{32}：row3-2·row2\)</h5>
+<p>第一行、第二行不变，只有第三行发生变化。 
+$$
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ 0 &amp; 1 &amp; 0 \\
+ 0 &amp;-2 &amp; 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 0 &amp; 2 &amp; -2 \\
+ 0 &amp; 4 &amp; 1
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 0 &amp; 2 &amp; -2 \\
+ 0 &amp; 0 &amp; 5
+ \end{bmatrix}
+$$ 
+消元矩阵
+\(
+E_{21}=
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ 0 &amp; 1 &amp; 0 \\
+ 0 &amp;-2 &amp; 1 
+ \end{bmatrix}
+\)。</p>
+<h3>· 综合</h3>
+<p>$$
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ -3&amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ 0 &amp; 1 &amp; 0 \\
+ 0 &amp;-2 &amp; 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 0 &amp; 2 &amp; -2 \\
+ 0 &amp; 4 &amp; 1
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ 1 &amp; 2 &amp; 1 \\
+ 0 &amp; 2 &amp; -2 \\
+ 0 &amp; 0 &amp; 5
+ \end{bmatrix}
+$$ 
+即
+$$
+E_{32}(E_{21}A)=U
+$$<br />
+消元矩阵化形式十分简洁，但它却包含这本节课的精华。</p>
+<h2>五、矩阵乘法</h2>
+<p>下面我们简单讨论一些矩阵乘法。<br />
+我们先思考一个问题，有没有一个矩阵可以使\(A\)一步到\(U\)，什么矩阵可以一次完成所有消元步骤？<br />
+首先矩阵乘法满足<strong>结合律</strong>，则<br />
+$$
+(E_{32}E_{21})A=U
+$$<br />
+这样我们就可以有单个矩阵\(E=E_{32}E_{21}\)，使得\(A\)一步到\(U\)。  </p>
+<h5>矩阵的逆（Inverse）</h5>
+<p>这里只举一个简单例子说明。<br />
+我们有一个矩阵
+\(
+ A=
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ -3&amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+\)
+，这个矩阵意义是对矩阵的第二行消元，第二行等于行2减3倍行1.我们现在希望找到另外一个矩阵\(A^{-1}\)来回做这一步，显然\(A^{-1}\)需要做到第二行等于行2加3倍行1，则
+\(
+A^{-1}=
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ 3 &amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+\)。我们称\(A^{-1}\)为\(A\)的逆矩阵（inverse matrix）。  </p>
+<p>$$
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ 3 &amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ -3&amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ 1 &amp; 0 &amp; 0 \\
+ 0 &amp; 1 &amp; 0 \\
+ 0 &amp; 0 &amp; 1 
+ \end{bmatrix}
+$$ 
+即 <br />
+$$
+A^{-1}A=I
+$$</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

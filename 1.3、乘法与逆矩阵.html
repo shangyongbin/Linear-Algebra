@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1.3、乘法与逆矩阵</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1>&amp;1.3 矩阵乘法与逆矩阵</h1>
+<hr />
+<h2>一、概述</h2>
+<p>在上一节最后我们简单提到了矩阵乘法，这一节我们继续讲解矩阵乘法的运算规则与意义。<br />
+<strong>第一部分</strong>，我们先介绍计算矩阵乘法的四种方法，不同解法从不同角度来审视矩阵乘法的含义，每种解法都很重要。<strong>第二部分</strong>，我们介绍矩阵的逆，我们主要关心两点：一个矩阵的逆是否存在、如果存在，矩阵的逆的计算方法【Gauss-Jordan消元法】。</p>
+<p><strong>要点：</strong>  </p>
+<ul>
+<li><strong>矩阵乘法（4种方法）Matrix multiplication (4 ways)</strong></li>
+<li><strong>矩阵的逆  Inverse of</strong> \(A \: AB \: A^T \) </li>
+<li><strong>高斯-若尔当消元法  Gauss-Jordan / find</strong> \(A^{-1}\)  </li>
+</ul>
+<h2>二、矩阵乘法</h2>
+<p>我们假设矩阵\( A \)乘矩阵\( B \)等于矩阵\( C \)。<br />
+矩阵相乘要求矩阵\( A \)的列数等于矩阵\( B \)的行数。假设矩阵\( A \)有\( m \)行\( n \)列，矩阵\( B \)有\( n \)行\( p \)列，则矩阵\( C \)有\( m \)行\( p \)列。<br />
+$$
+A_{m\times n}·B_{n\times p}=C_{m\times p}
+$$  </p>
+<h3>· 方法1 - 常规方法</h3>
+<p>第一种方法是计算矩阵\( C \)的每一个元素\( c_{ij}\)。<br />
+<div align=center><img src="https://i.imgur.com/S7T1NMi.png" />
+<div align=left> <br />
+即<br />
+$$
+(row \: i \: of A)·(col \: j \: of \:B)=c_{ij}
+$$  </p>
+<p>例如，\( c_{34}\)的计算。<br />
+<div align=center><img src="https://i.imgur.com/nWPRxQp.png" />
+<div align=left>  </p>
+<p>$$
+\begin{equation}
+\begin{split}
+c_{34}=(row \: 3 \: of A)·(col \: 4 \: of \:B)
+&amp;=a_{31}·b_{14}+a_{32}·b_{24}+··· \\
+&amp;=\sum_{k=1}^{n}a_{3k}·b_{k4}
+\end{split}
+\end{equation}
+$$  </p>
+<h3>· 方法2 - 列方法</h3>
+<p>该方法是每次考虑矩阵\(B\)的一列进行计算。<br />
+该方法基于我们的已知知识（1.2节）：<strong><em>矩阵乘列向量等于列向量</em></strong>，结果为矩阵各列的线性组合，组合系数为列向量的对应分量。<br />
+即<br />
+<div align=center><img src="https://i.imgur.com/Cac0Cw6.png" />
+<div align=left>  </p>
+<p>设矩阵
+\(
+B=
+\begin{bmatrix}
+ b_{1}&amp;b_{2}&amp;···
+\end{bmatrix}
+\)，其中\(b_{1},b_{2},···\).为列向量。<br />
+则<br />
+<div align=center><img src="https://i.imgur.com/bQYb8Yv.png" />
+<div align=left>  </p>
+<p>由此我们可以发现：<strong><em>矩阵</em></strong>\(C\)<strong><em>的每一列都是矩阵<strong><em>\(A\)</em></strong>各列的线性组合</em></strong>，只不过组合的系数不同而已。</p>
+<h3>· 方法3 - 行方法</h3>
+<p>该方法是每次考虑矩阵\(A\)的一行进行计算。<br />
+该方法基于我们的已知知识（1.2节）：<strong><em>行向量乘矩阵等于行向量</em></strong>，结果为矩阵各行的线性组合，组合系数为行向量的对应分量。<br />
+即<br />
+<div align=center><img src="https://i.imgur.com/RFIw4Xw.png" />
+<div align=left>  </p>
+<p>设矩阵
+\(
+A=
+\begin{bmatrix}
+ a_{1}^{T} \\
+ a_{2}^{T} \\
+ ···
+\end{bmatrix}
+\)，其中\(a_{1}^{T},a_{2}^{T},···\).为行向量。<br />
+则<br />
+<div align=center><img src="https://i.imgur.com/bLDZvhZ.png" />
+<div align=left>   </p>
+<p>由此我们可以发现：<strong><em>矩阵</em></strong>\(C\)<strong><em>的每一行都是矩阵<strong><em>\(B\)</em></strong>各行的线性组合</em></strong>，只不过组合的系数不同而已。</p>
+<h3>· 方法4 - 了解</h3>
+<p>该方法是用矩阵\(A\)的第\(i\)列乘矩阵\(B\)的第\(i\)行得到矩阵\(C_{i}\)。当\(i\)取\(1,2,···,n\)时，依次得到矩阵\(C_{1},C_{2},···,C_{n}\)。最后将这些矩阵相加得到矩阵\(C\)。<br />
+$$
+(C_{i})_{m \times p}=(col \: i \: of \: A)_{m \times 1} \times (row \: i \: of \: B)_{1 \times p}
+$$<br />
+例如：<br />
+$$
+\begin{bmatrix}
+2 \\
+3 \\
+4
+\end{bmatrix}·
+\begin{bmatrix}
+1 &amp; 6
+\end{bmatrix}=
+\begin{bmatrix}
+2 &amp; 12\\
+3 &amp; 18\\
+4 &amp; 24
+\end{bmatrix}
+$$<br />
+我们观察结果的特点：结果是一个很特殊的矩阵，它的每一列都是原来列向量的倍数，它的每一行都是原来行向量的倍数。</p>
+<p>完整的例子：<br />
+$$
+\begin{bmatrix}
+2 &amp; 7\\
+3 &amp; 8\\
+4 &amp; 9
+\end{bmatrix}·
+\begin{bmatrix}
+1 &amp; 6 \\
+0 &amp; 0 
+\end{bmatrix}=
+\begin{bmatrix}
+2 \\
+3 \\
+4
+\end{bmatrix}·
+\begin{bmatrix}
+1 &amp; 6
+\end{bmatrix}+
+\begin{bmatrix}
+7 \\
+8 \\
+9
+\end{bmatrix}·
+\begin{bmatrix}
+0 &amp; 0
+\end{bmatrix}=
+\begin{bmatrix}
+2 &amp; 12\\
+3 &amp; 18\\
+4 &amp; 24
+\end{bmatrix}
+$$  </p>
+<h3>· 方法5 - 分块乘法</h3>
+<p>略</p>
+<h2>三、矩阵的逆（方阵）</h2>
+<p>对于一个<strong>方阵</strong>( <strong>Square Matrix</strong> )而言，我们关心两点：\(A\)的<strong>逆</strong>（<strong>Inverse</strong>）是否存在？如果存在，如何求逆？<br />
+我们先来了解一下矩阵的逆的概念，再讨论这两个问题。</p>
+<h3>· 逆的概念</h3>
+<p>对于方阵\(A\)，如果\(A\)的逆矩阵存在，我们记为\(A^{-1}\)，则<br />
+$$
+A^{-1}·A=A·A^{-1}=I
+$$我们称\(A^{-1}·A=I\)的\(A^{-1}\)为<strong>左逆</strong>，\(A·A^{-1}=I\)的\(A^{-1}\)为<strong>右逆</strong> 。对于方阵而言，左逆等于右逆，统称为矩阵的<strong>逆</strong>( <strong>Inverse</strong> ); 如果是非方阵，左逆是不等于右逆的，统称为<strong>伪逆</strong>（<strong>pseudo-inverse</strong>）。我们现在只讨论方阵的逆，非方阵的伪逆我们会在第34讲[左右逆和伪逆]一节讲解。  </p>
+<h3>· 逆是否存在</h3>
+<p>对于<strong>方阵</strong>( <strong>Square Matrix</strong> )\(A\)，如果\(A^{-1}\)存在，我们称\(A\)是<strong>可逆的</strong>( <strong>invertible</strong> )或<strong>非奇异的</strong>( <strong>non-sigular</strong> )；如果\(A^{-1}\)不存在，我们称\(A\)是<strong>不可逆的</strong>( <strong>irreversible</strong> )或<strong>奇异的</strong>( <strong>sigular</strong> )。  </p>
+<p>下面讨论奇异矩阵（没有逆）的情况。  </p>
+<p>举例。<br />
+对于方阵
+\(A=
+\begin{bmatrix}
+ 1 &amp; 3 \\
+ 2 &amp; 6 \\
+\end{bmatrix}
+\)，这个矩阵没有逆，但是为什么呢？<br />
+下面我们做出几种不同解释：</p>
+<ul>
+<li>\(A\)的行列式为0，则\(A\)不可逆。这是我们在行列式部分将要学得到的。 </li>
+<li>如果\(A\)乘一个矩阵，我们考虑\(A\)的列，结果的每一列都来自\(A\)的各列，都是\(A\)的各列的线性组合。这样有可能得到单位阵吗？不可能！单位阵第一列\(\begin{bmatrix} 1 \\ 0 \\ \end{bmatrix}\)不可能是\(A\)的两列的线性组合。因为\(A\)的两列共线，所有的线性组合都在一条直线上，\(\begin{bmatrix} 1 \\ 0 \\ \end{bmatrix}\)不在其上。</li>
+<li><strong>存在非0向量\(x\)，使得\(Ax=0\)</strong>，则\(A\)不可逆。
+$$
+Ax=
+\begin{bmatrix}
+ 1 &amp; 3 \\
+ 2 &amp; 6 \\
+\end{bmatrix}
+\begin{bmatrix}
+  3  \\
+ -1  \\
+\end{bmatrix}
+=0
+$$因为假设\(A\)可逆，则\(A^{-1}·A·x=I·x=0\)，则\(x\)为0。但\(x\)不为0，则假设不成立，\(A\)不可逆。  </li>
+</ul>
+<p><strong>结论：</strong> 对于方阵而言，不可逆矩阵（奇异矩阵）的列能通过线性组合得到0，即列线性相关（其实行也线性相关，我们只用考虑列就可以了）
+。  </p>
+<h3>· 逆的求解</h3>
+<p>举例。<br />
+对于方阵
+\(A=
+\begin{bmatrix}
+ 1 &amp; 3 \\
+ 2 &amp; 7 \\
+\end{bmatrix}
+\)，这个矩阵可逆，它的逆矩阵\(A^{-1}\)如何求解呢？<br />
+$$
+A·A^{-1}=
+\begin{bmatrix}
+ 1 &amp; 3 \\
+ 2 &amp; 6 \\
+\end{bmatrix}
+\begin{bmatrix}
+ a &amp; b  \\
+ c &amp; d  \\
+\end{bmatrix}=
+\begin{bmatrix}
+ 1 &amp; 0  \\
+ 0 &amp; 1  \\
+\end{bmatrix}
+$$<br />
+我们从矩阵乘法的列方法考虑\(A·A^{-1}\)，这就又回到了解方程组的问题了。<br />
+$$
+\begin{bmatrix}
+ 1 &amp; 3 \\
+ 2 &amp; 6 \\
+\end{bmatrix}
+\begin{bmatrix}
+ a   \\
+ c  \\
+\end{bmatrix}=
+\begin{bmatrix}
+ 1 \\
+ 0 \\
+\end{bmatrix}
+\qquad
+\begin{bmatrix}
+ 1 &amp; 3 \\
+ 2 &amp; 6 \\
+\end{bmatrix}
+\begin{bmatrix}
+ b  \\
+ d  \\
+\end{bmatrix}=
+\begin{bmatrix}
+ 0  \\
+ 1  \\
+\end{bmatrix}
+$$  </p>
+<p>理解这些基础后，下面我们介绍<strong>高斯-若尔当</strong>( <strong>Gauss-Jordan</strong> )消元法同时求解两个方程组来求逆。<br />
+$$
+\left[
+\begin{array}{cc|cc}
+ 1 &amp; 3 &amp; 1 &amp; 0\\
+ 2 &amp; 7 &amp; 0 &amp; 1\\
+\end{array}
+\right]
+\xrightarrow[]{row2-2·row1}
+\left[
+\begin{array}{cc|cc}
+ 1 &amp; 3 &amp; 1 &amp; 0\\
+ 0 &amp; 1 &amp; -2 &amp; 1\\
+\end{array}
+\right]
+\xrightarrow[]{row1-3·row2}
+\left[
+\begin{array}{cc|cc}
+ 1 &amp; 0 &amp; 7 &amp; -3\\
+ 0 &amp; 1 &amp; -2 &amp; 1\\
+\end{array}
+\right]
+$$
+$$
+A|I
+\rightarrow
+I|A^{-1}
+$$<br />
+则\(A^{-1}=\begin{bmatrix}
+7 &amp; -3 \\
+-2&amp; -1 \\
+\end{bmatrix}\)，同时消元矩阵\(E=A^{-1}\)。  </p>
+<h3>· \(AB与A^T \)的逆</h3>
+<p>$$
+\boxed{(AB)^{-1}=B^{-1}A^{-1}}
+$$
+证明：<br />
+$$
+(AB)·(B^{-1}A^{-1})=A·(BB^{-1})·A^{-1}=A·A^{-1}=I
+$$<br />
+$$
+\boxed{(A^{T})^{-1}=(A^{-1})^{T}}
+$$
+证明：<br />
+$$
+\because A·A^{-1}=I  \qquad
+\therefore (A^{-1})^{T}·A^{T}=I
+$$</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

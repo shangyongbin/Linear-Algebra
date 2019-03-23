@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2.3、求解Ax=b：可解性、解的结构</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1>&amp;2.3 求解 \(Ax=b\)：可解性、解的结构</h1>
+<hr />
+<h2>一、概述</h2>
+<p>这节我们将求解完整的线性方程组：\(Ax=b\)，我们主要关心两点：可解性与解的结构。<br />
+<strong>首先</strong> 我们讨论 \(Ax=b\) 的是否有解，得出可解性条件。<strong>然后</strong> 我们求解 \(Ax=b\)，得出解的结构：\(x_{complete}=x_{particular}+x_{nullspace}\)。<strong>最后</strong> 我们讨论不同秩下，\(Ax=b\) 的性质与解的个数。  </p>
+<p><strong>要点：</strong>  </p>
+<ul>
+<li><strong>可解性</strong> <strong>solvability</strong></li>
+<li><strong>通解：\(x_{complete}=x_{particular}+x_{nullspace}\)</strong>  </li>
+<li>
+<strong>秩 \(r\)</strong> 
+<ul>
+<li>\( r=n&lt;m\)</li>
+<li>\( r=m&lt;n\)</li>
+<li>\( r=n=m\)</li>
+<li>\( r&lt;n,r&lt;m\)</li>
+</ul>
+</li>
+</ul>
+<h2>二、</h2>
+<h3>· 举例</h3>
+<p>我们还使用上节课的例子，
+\(A=
+\begin{bmatrix}
+1 &amp; 2 &amp; 2 &amp; 2 \\
+2 &amp; 4 &amp; 6 &amp; 8 \\
+3 &amp; 6 &amp; 8 &amp; 10
+\end{bmatrix}\)，则<br />
+$$
+\left\{
+\begin{matrix}
+x_1+2x_2+2x_3+2x_4=b_1 &amp;\quad(1)\\
+2x_1+4x_2+6x_3+8x_4=b_2 &amp;\quad(2)\\
+3x_1+6x_2+8x_3+10x_4=b_3 &amp;\quad(3)
+\end{matrix}
+\right.
+$$<br />
+增广矩阵 \(\bar{A}= \left[\begin{array}{cccc|c} 1 &amp; 2 &amp; 2 &amp; 2 &amp;b_1\\2 &amp; 4 &amp; 6 &amp; 8 &amp;b_2\\3 &amp; 6 &amp; 8 &amp; 10 &amp;b_3 \end{array} \right] \)。</p>
+<h3>· 可解性</h3>
+<p>由观察方程组可知，方程(1)左侧加方程(2)左侧等于方程(3)左侧，如果方程有解的话，必须等号右侧 \(b_3=b_1+b_2\) 。这很容易看出来，换句话说，如果左侧各行的线性组合得到0，那么右侧常数的相同组合必然也得等于0。<br />
+下面我们用消元使这种关系显示得呈现出来。<br />
+$$
+\bar{A}=
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 2 &amp; 2 &amp;b_1 \\
+2 &amp; 4 &amp; 6 &amp; 8 &amp;b_2 \\
+3 &amp; 6 &amp; 8 &amp; 10 &amp;b_3
+\end{array}
+\right]
+\xrightarrow [row3-3·row1]{row2-2·row1}
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 2 &amp; 2 &amp;b_1\\
+0 &amp; 0 &amp; \boxed{2} &amp; 4 &amp;b_2-2b_1 \\
+0 &amp; 0 &amp; 2 &amp; 4 &amp;b_3-3b_1
+\end{array}
+\right]
+\xrightarrow []{row3-row2}
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 2 &amp; 2 &amp;b_1 \\
+0 &amp; 0 &amp; \boxed{2} &amp; 4 &amp;b_2-2b_1 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp;b_3-b_2-b_1
+\end{array}
+\right]
+$$<br />
+于是有 \(0=b_3-b_2-b_1\)，这是有解的条件，与我们之前观察的一致，不过对于复杂的方程组直接观察十分困难，进行消元才是正确的做法。  </p>
+<p>\(\boxed{\large 总结}\)：方程组的可解性必须满足的条件：<br />
+\( \qquad \qquad Ax=b \) <strong>有解，</strong>
+<div align=center>
+<strong>(1) 当且仅当 \(b\) 属于 \(A\) 的列空间，即 \(b \in C(A) \qquad \quad \qquad \: \)</strong><br />
+<strong>(2) 如果 \(A\) 的线性组合得到零行，\(b\) 分量的相同组合也必须为零</strong>
+<div align=left>  </p>
+<h3>· 解的结构</h3>
+<p>下面我们讨论有解时解的结构。<br />
+假设 \(b= \begin{bmatrix} 1 \\ 5 \\ 6 \end{bmatrix} \)。  </p>
+<p>\( \boxed{\large 消元}\)  </p>
+<p>$$
+\bar{A}=
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 2 &amp; 2 &amp;1 \\
+2 &amp; 4 &amp; 6 &amp; 8 &amp;5 \\
+3 &amp; 6 &amp; 8 &amp; 10 &amp;6
+\end{array}
+\right]
+\xrightarrow [row3-3·row1]{row2-2·row1}
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 2 &amp; 2 &amp;1\\
+0 &amp; 0 &amp; \boxed{2} &amp; 4 &amp;3 \\
+0 &amp; 0 &amp; 2 &amp; 4 &amp;3
+\end{array}
+\right]
+\xrightarrow []{row3-row2}
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 2 &amp; 2 &amp;1 \\
+0 &amp; 0 &amp; \boxed{2} &amp; 4 &amp;3 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp;0
+\end{array}
+\right]=\bar{U}
+\xrightarrow [row2 \div 2]{row1-row2}
+\left[
+\begin{array}{cccc|c}
+\boxed{1} &amp; 2 &amp; 0 &amp; -2 &amp; -2 \\
+0 &amp; 0 &amp; \boxed{1} &amp; 2 &amp; 1.5 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{array}
+\right]=\bar{R}
+$$   </p>
+<p>\( \boxed{\Large x_{particular}}\)  </p>
+<p>我们先找出 \(Ax=b\) 的一个特解。 </p>
+<p><strong>方法</strong>：将所有自由变量设为0，然后解出 \(Ax=b\) 中的主变量。   </p>
+<p>本例中自由变量 \(x_2=0,x_4=0\)，则由 \(\bar{R}\) 可得主变量 \(x_1=-2,x_3=1.5\)，即 \(\large x_{p}=\begin{bmatrix} -2 \\ 0 \\ 1.5 \\ 0 \end{bmatrix}\)。  </p>
+<p>\( \boxed{\Large x_{nullspace}}\)  </p>
+<p>$$
+ x_1 \quad x_2  \quad x_3 \quad  x_4 \:\:\:\: \quad \quad x_1 \quad  x_3 \quad  x_2  \quad x_4 \quad  \quad  \quad  \quad  \: \:
+$$</p>
+<p>$$
+R=
+\begin{bmatrix}
+\boxed{1} &amp; 2 &amp; 0 &amp; -2 \\
+0 &amp; 0 &amp; \boxed{1} &amp; 2 \\
+0 &amp; 0 &amp; 0 &amp; 0 
+\end{bmatrix}=
+\left[
+\begin{array}{cc|cc}
+\boxed{1} &amp; 0 &amp; 2 &amp; -2 \\
+0 &amp; \boxed{1} &amp; 0 &amp; 2 \\
+\hline
+0 &amp; 0 &amp; 0 &amp; 0 
+\end{array}
+\right]=
+\left[
+\begin{array}{c|c}
+\Large I &amp; \Large F\\
+\hline
+\large 0 &amp; \large 0
+\end{array}\right]
+$$<br />
+则<br />
+$$
+N=\begin{bmatrix} \large -F \\ I \end{bmatrix}=
+\begin{bmatrix} -2 &amp; 2 \\ 0 &amp; -2 \\ 1 &amp; 0  \\ 0 &amp; 1 \end{bmatrix}
+\begin{matrix} x_1 \\ x_3 \\ x_2 \\ x_4 \end{matrix}=
+\begin{bmatrix} -2 &amp; 2 \\ 1 &amp; 0 \\ 0 &amp; -2  \\ 0 &amp; 1 \end{bmatrix}
+\begin{matrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{matrix}
+$$
+$$
+\large x_{n}=c·
+\begin{bmatrix} -2  \\ 1 \\ 0   \\ 0 \end{bmatrix}+
+d·\begin{bmatrix} 2 \\ 0 \\ -2  \\ 1 \end{bmatrix}
+$$  </p>
+<p>\( \boxed{\large 通解\Large x_{complete}}\)  </p>
+<p>\(Ax=b\)的解为：<br />
+$$
+\large x_{c}= \large x_{p}+\large x_{n}=
+\begin{bmatrix} -2 \\ 0 \\ 1.5 \\ 0 \end{bmatrix}+
+c·\begin{bmatrix} -2  \\ 1 \\ 0   \\ 0 \end{bmatrix}+
+d·\begin{bmatrix} 2 \\ 0 \\ -2  \\ 1 \end{bmatrix}
+$$  </p>
+<ul>
+<li>
+<p>解释：<br />
+$$
+\begin{equation}
+A·x_{p}=b \\
+A·x_{n}=0
+\end{equation}
+$$
+则
+$$
+\begin{equation}
+A·(x_{p}+x_{n})=b 
+\end{equation}
+$$  
+</p>
+</li>
+<li>
+<p>方程的特解与零空间内任意向量之和任为方程的解。  
+</p>
+</li>
+<li>解空间不是向量空间，是不通过原点的一个平面。  </li>
+</ul>
+<h3>· 解的个数与秩的关系</h3>
+<p>下面我们讨论一般情况下解的个数问题。  </p>
+<p>对于秩为 \(r\) 的矩阵 \(A_{m \times n}\)，必然有 \( r \leqslant m,r \leqslant n\)。  </p>
+<p>我们来讨论满秩的情况。  </p>
+<h4>(1) 列满秩：\(r=n &lt; m\)</h4>
+<p>$$
+A=\begin{bmatrix}  &amp; &amp;\\ &amp; &amp;\\ &amp; &amp;\\ &amp; &amp;\\ \end{bmatrix} \rightarrow R=\begin{bmatrix}  \Large I  \\ \Large 0  \end{bmatrix} 
+$$<br />
+如：
+$$
+A=\begin{bmatrix}  1&amp; 3\\ 2&amp; 1\\ 6&amp; 1\\ 5&amp;1 \\ \end{bmatrix} \rightarrow R=\begin{bmatrix}  1&amp; 0\\ 0&amp; 1\\ 0&amp; 0\\ 0&amp;0 \\ \end{bmatrix}
+$$ </p>
+<ul>
+<li>每一列都有主元，列线性无关，行线性相关，有 <strong>\(n\) 个主变量，没有自由变量</strong>，此时 <strong>零空间只有一个零向量，\(N(A)=\{zero \: vector\}\)</strong></li>
+<li>
+\(Ax=b\) 的解的 <strong>个数</strong> 为 <strong>0</strong> 或 <strong>1</strong> 个。
+<ul>
+<li>当 \(b\) 满足 <strong>可解性条件</strong> 时，有 <strong>唯一解</strong>，否则 <strong>无解</strong>。</li>
+<li>如果有解的话，有<strong>唯一解 \(x_c=x_p\)</strong></li>
+</ul>
+</li>
+</ul>
+<h4>(2) 行满秩：\(r=m &lt; n\)</h4>
+<p>$$
+A=\begin{bmatrix}  &amp; &amp; &amp;  &amp; \\ &amp; &amp; &amp; &amp;\\ \end{bmatrix} \rightarrow R=\begin{bmatrix}  \Large I  &amp; \Large F  \end{bmatrix} 
+$$<br />
+如：
+$$
+A=\begin{bmatrix} 1 &amp; 2&amp; 6&amp;5  \\1 &amp; 1&amp;1 &amp;1 \\ \end{bmatrix} \rightarrow R=\left[\begin{array}{cc|cc} 1 &amp; 0 &amp; -4 &amp; -3  \\0 &amp; 1 &amp; 5 &amp; 4 \\ \end{array}\right]
+$$  </p>
+<ul>
+<li>每一行都有主元，行线性无关，列线性相关，有 <strong>\(m\) 个主变量，\(n-m\) 个自由变量</strong>，此时零空间 \(N(A)=\begin{bmatrix}  \large -F \\ \large I \end{bmatrix} \)</li>
+<li>对于任意 \(b，Ax=b\)都有解，解的个数为<strong>无数个</strong></li>
+</ul>
+<h4>(3) 满秩：\(r=m = n\)</h4>
+<p>$$
+A=\begin{bmatrix}  &amp; &amp; &amp;\\ &amp; &amp; &amp;\\ &amp; &amp; &amp;\end{bmatrix} \rightarrow R=I 
+$$
+如：
+$$
+A=\begin{bmatrix}  1&amp;2\\ 3&amp; 1\end{bmatrix} \rightarrow R=\begin{bmatrix}  1&amp;0\\ 0&amp; 1\end{bmatrix}<br />
+$$  </p>
+<ul>
+<li>\(r=m = n\) 意味着 \(A\) 是一个<strong>可逆矩阵</strong>	</li>
+<li><strong>零空间只有一个零向量</strong></li>
+<li>对于任意 \(b，Ax=b\)都有解，解的个数为<strong>1个</strong>  </li>
+</ul>
+<p>\( \boxed{\large 总结}\)  </p>
+<p><div align=center><img src="https://i.imgur.com/VwKEmWC.png" />
+<div align=left>  </p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
