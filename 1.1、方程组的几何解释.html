@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1、方程组的几何解释</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1>绪论</h1>
+<hr />
+<p>为了复习线性代数，顺便练习markdown写作，我准备用寒假无聊时间整理线性代数笔记，仅供参考。  </p>
+<ul>
+<li>写作平台：Markdownpad2  </li>
+<li>参考课程：<a href="http://open.163.com/special/opencourse/daishu.html">麻省理工18.06课程：线性代数</a>  </li>
+</ul>
+<h1>方程组的几何解释</h1>
+<hr />
+<h2>一、概述</h2>
+<p>本讲将讨论线性代数基础：<strong>求解线性方程组</strong>。<br />
+<strong>首先</strong> 从方程组开始讲起，它有n个未知数、n个方程，方程数与未知数个数相等，这是最好的情况。<strong>然后</strong>举例描述“行图像”（row picture），一个“行图像”表示一个方程。<strong>接着</strong> 引出“列图像”（column picture）加以描述，“列图像”是本节重点。行和列组成矩阵（matrix），<strong>最后</strong>，我们引入矩阵形式来审视问题。</p>
+<p><strong>要点：</strong>  </p>
+<ul>
+<li>n个未知数，n个方程  </li>
+<li>行图像  </li>
+<li>列图像  </li>
+<li>矩阵形式  </li>
+</ul>
+<h2>二、举例1</h2>
+<p>举例，两个方程、两个未知数。<br />
+以
+$$
+ \left\{
+ \begin{matrix}
+  2x-y=0 \\ 
+ -x+2y=3 
+ \end{matrix}
+ \right. \tag1
+$$
+为例。  </p>
+<h3>· 矩阵形式</h3>
+<p>方程（1）的矩阵形式为：<br />
+$$
+ \begin{bmatrix}
+  2 &amp; -1 \\ 
+ -1 &amp;  2
+ \end{bmatrix}
+ \begin{bmatrix}
+  x \\
+  y 
+ \end{bmatrix}
+ =
+ \left[
+ \begin{matrix}
+  0 \\
+  3 \\
+ \end{matrix}
+ \right] 
+$$<br />
+即<br />
+$$
+Ax=b
+$$</p>
+<h3>· 行图像  &emsp;&emsp;</h3>
+<p>一次取一行，作图于\(xy\)平面。每一行的图像为一条直线，两条直线相交于一点(1,2)，这一点就是方程组的解。<br />
+<div align=center><img src="https://i.imgur.com/vulCMvk.jpg" alt="row picture" /><br />
+row picture<br />
+<div align=left> </p>
+<h3>· 列图像</h3>
+<p>方程（1）可改写为：<br />
+$$
+ \begin{bmatrix}
+  2 \\
+ -1 \\
+ \end{bmatrix}
+ x + 
+ \begin{bmatrix}
+ -1 \\
+  2 \\
+ \end{bmatrix}
+ y
+ =
+ \begin{bmatrix}
+ 0 \\
+ 3 \\
+ \end{bmatrix}
+$$<br />
+从列图像的角度看，现在该方程组的目标是如何将向量\( \begin{bmatrix} 2 \\ -1  \end{bmatrix} \)与向量\( \begin{bmatrix} -1 \\ 2 \end{bmatrix} \)正确组合，得到向量\( \begin{bmatrix} 0 \\ 3 \end{bmatrix} \)，这就需要找到这两个列向量正确的“线性组合”，组合系数即为方程组的解。<strong>线性组合</strong>（<strong>linear combination</strong>）是贯穿整个课程的基本操作，这里是列向量的线性组合（linear combination of columns）。  </p>
+<h4>（1）</h4>
+<p>当\( x=1,y=2 \)时，即<br />
+$$
+ \begin{bmatrix}
+  2 \\
+ -1 \\
+ \end{bmatrix}
+ 1 + 
+ \begin{bmatrix}
+ -1 \\
+  2 \\
+ \end{bmatrix}
+ 2
+ =
+ \begin{bmatrix}
+ 0 \\
+ 3 \\
+ \end{bmatrix}
+$$<br />
+此时列图像如下图所示。<br />
+<div align=center><img src="https://i.imgur.com/8kn2RhJ.jpg" alt="column picture" /><br />
+column picture
+<div align=left>   </p>
+<h4>（2）</h4>
+<p>由以上的分析可知，<strong>1</strong>倍的\( \begin{bmatrix} 2 \\ -1  \end{bmatrix} \)与<strong>2</strong>倍的\( \begin{bmatrix} -1 \\ 2 \end{bmatrix} \)的线性组合得到\( \begin{bmatrix} 0 \\ 3 \end{bmatrix} \)，则\(x=1,y=2\)为方程的解。<br />
+现在我们抛开问题本身，思考一个问题， <strong>这两个列向量所有的线性组合是什么？</strong> ，也就是说，	选取所有的x、所有的y，所有的线性组合，结果是什么？<br />
+<strong>结果</strong>是会得到任意的右侧向量b，两个列向量的组合会布满整个二维平面。  </p>
+<h2>三、举例2</h2>
+<p>举例，三个方程、三个未知数。<br />
+以<br />
+$$
+ \left\{
+ \begin{matrix}
+ 2x-y+0z=0 \\
+ -x+2y-z=-1 \\
+ 0x-3y+4z=4 
+ \end{matrix}
+ \right. \tag2
+$$<br />
+为例。  </p>
+<h3>· 矩阵形式</h3>
+<p>方程（2）的矩阵形式为：<br />
+$$
+ \begin{bmatrix}
+ 2 &amp; -1 &amp; 0 \\
+ -1 &amp; 2 &amp; -1 \\
+ 0 &amp; -3 &amp; 4 
+ \end{bmatrix}
+ \begin{bmatrix}
+ x \\
+ y \\
+ z
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ 0 \\
+ -1 \\
+ 4 \\
+ \end{bmatrix}
+$$<br />
+即<br />
+$$
+Ax=b
+$$  </p>
+<h3>· 行图像</h3>
+<p>一次取一行，作图于\(xyz\)三维空间。每一行的图像为一个平面，三个平面相交于一点（0,0,1），这一点就是方程的解。<br />
+<div align=center><img src="https://i.imgur.com/NvhgwY7.jpg" alt="row picture" /><br />
+row picture
+<div align=left>  </p>
+<h3>· 列图像</h3>
+<p>方程（2）可改写为：<br />
+$$
+ \begin{bmatrix}
+  2 \\
+ -1 \\
+  0
+ \end{bmatrix}
+ x + 
+ \begin{bmatrix}
+ -1 \\
+  2 \\
+ -3
+ \end{bmatrix}
+ y + 
+ \begin{bmatrix}
+ 0 \\
+ -1 \\
+ 4
+ \end{bmatrix}
+ z
+ =
+ \begin{bmatrix}
+ 0 \\
+ -1 \\
+ 4
+ \end{bmatrix}
+$$<br />
+从列图像的角度看，现在该方程组的目标是如何将向量\( \begin{bmatrix} 2 \\ -1 \\ 0 \end{bmatrix} \)、向量\( \begin{bmatrix} -1 \\ 2 \\ -3 \end{bmatrix} \)与向量\( \begin{bmatrix} 0 \\ -1 \\ 4 \end{bmatrix} \)线性组合，得到向量\( \begin{bmatrix} 0 \\ -1 \\ 4 \end{bmatrix} \)，组合系数为方程组的解。  </p>
+<h3>（1）</h3>
+<p>列图像如图所示。<br />
+<div align=center><img src="https://i.imgur.com/Ei7NJJo.jpg" alt="column picture" /><br />
+column picture
+<div align=left>   </p>
+<h3>（2）</h3>
+<p>同理，<strong>0</strong> 倍的\( \begin{bmatrix} 2 \\ -1 \\ 0 \end{bmatrix} \)、<strong>0</strong> 倍的\( \begin{bmatrix} -1 \\ 2 \\ -3 \end{bmatrix} \)与<strong>1</strong> 倍的\( \begin{bmatrix} 0 \\ -1 \\ 4 \end{bmatrix} \)线性组合，得到\( \begin{bmatrix} 0 \\ -1 \\ 4 \end{bmatrix} \)，则该方程组的解为\(x=0,y=0,z=1\)。<br />
+现在我们抛开问题本身，思考一个问题，不管右侧向量b是多少，该方程组是否都有解？即<strong><em>对于任意b，是否都能求解Ax=b？</em></strong><br />
+用线性组合的术语来说，<strong><em>列向量的线性组合是否能覆盖整个三维空间？</em></strong><br />
+对于例题中的A来说，答案是肯定的。但对于另一些矩阵，答案可能是否定的，那什么时候会这样呢（列向量的线性组合无法得到b）？<br />
+我们可以想象这种情况，当三个列向量位于同一平面时（如第三个列向量可以由其他两个列向量组合得到），其线性组合必定在这个平面上。这时，  </p>
+<ol>
+<li>如果b位于这个平面时，方程组有解；</li>
+<li>但更多情况下，b不在这个平面上，方程组无解，这种情况称为<strong>奇异</strong>（<strong>sigular</strong>），矩阵A不可逆。【注：在后面会详细研究奇异矩阵】  </li>
+</ol>
+<p>下面我们可以尝试考虑九维的情况。假设有9个方程、9个未知数，此时有9个列向量，每个列向量有9个分量。考虑9个列向量的线性组合，是否总能得到右侧向量b？ 这取决于这9个列向量，有时答案是肯定的，比如随机矩阵，因为随机矩阵总是可逆的；但是当选取一些相互不独立的列向量时，答案是否定的。<br />
+<strong>现在我们只关心系数矩阵为非奇异矩阵的情形，即只要通过正确的线性组合，就可以得到任意的b。</strong></p>
+<h2>四、矩阵</h2>
+<p>线性方程组的一般矩阵形式为：<br />
+$$
+Ax=b
+$$<br />
+这是一种乘法运算，我们这里研究如何用矩阵乘以向量。<br />
+举例：<br />
+$$
+\begin{bmatrix}
+ 2 &amp; 5 \\
+ 1 &amp; 3 \\
+\end{bmatrix}
+\begin{bmatrix}
+ 1 \\
+ 2 
+\end{bmatrix}<br />
+ = 
+\begin{bmatrix}
+ 2 \\
+ 1 
+\end{bmatrix} 
+ 1 + 
+\begin{bmatrix}
+ 5 \\
+ 3 
+\end{bmatrix}<br />
+ 2 =
+\begin{bmatrix}
+ 12 \\
+ 7 
+\end{bmatrix}<br />
+$$<br />
+<strong>总结</strong>：\(Ax\)等于A的<strong>列向量的线性组合</strong>  </p>
+<h2>五、小结</h2>
+<p>这是线性代数课程的第一部分第一节，我们通过举两个简单例子对方程组进行<strong>几何解释</strong>，引入方程组的<strong>矩阵形式</strong>，为第一部分后续的通过矩阵消元求解线性方程组打下基础。<br />
+方程组的几何解释分为两部分：行图像和列图像。<br />
+行图像是方程组的每一个方程对应的几何图像，两个变量对应二维平面的直线，三个变量对应三维空间的平面，四个及以上个数的变量对应四维及以上维度的超平面（hyperplane），无法可视化。行图像局限性很大，当等号右侧的b发生变化时，行图像也会发生变化，不具有普遍研究的意义。<br />
+列图像是相同变量所对应系数组成的列向量。它不随右侧b的变化而变化。</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
